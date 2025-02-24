@@ -22,10 +22,10 @@ export class OracleSpService {
 
             const result = await connection.execute(
                 `BEGIN
-                    sp1(:res);
+                    USCIB_Managed_Pkg.GetRegions(:p_cursor);
                 END;`,
                 {
-                    res: {
+                    p_cursor: {
                         type: oracledb.CURSOR,
                         dir: oracledb.BIND_OUT
                     }
@@ -35,8 +35,8 @@ export class OracleSpService {
                 }
             );
 
-            if (result.outBinds && result.outBinds.res) {
-                const cursor = result.outBinds.res; // The OUT cursor
+            if (result.outBinds && result.outBinds.p_cursor) {
+                const cursor = result.outBinds.p_cursor; // The OUT cursor
                 let rowsBatch;
 
                 do {
@@ -72,17 +72,17 @@ export class OracleSpService {
 
             const result = await connection.execute(
                 `BEGIN
-                   sp1(:a,:b,:res);
+                   sp1(:p_region,:p_name,:p_cursor);
                  END;`, {
-                a: {
+                p_region: {
                     val: "03",
                     type: oracledb.DB_TYPE_VARCHAR
                 },
-                b: {
+                p_name: {
                     val: 'indu1',
                     type: oracledb.DB_TYPE_VARCHAR
                 },
-                res: {
+                p_cursor: {
                     type: oracledb.CURSOR,
                     dir: oracledb.BIND_OUT
                 }
@@ -90,7 +90,7 @@ export class OracleSpService {
                 outFormat: oracledb.OUT_FORMAT_OBJECT
             }
             );
-            let fres = await result.outBinds.res.getRows();
+            let fres = await result.outBinds.p_cursor.getRows();
 
             return fres
 
@@ -112,17 +112,17 @@ export class OracleSpService {
 
             const result = await connection.execute(
                 `BEGIN
-                   sp1(:a,:b,:res);
+                   sp1(:p_regionID,:p_name,:p_cursor);
                  END;`, {
-                a: {
+                p_regionID: {
                     val: 3,
                     type: oracledb.DB_TYPE_NUMBER
                 },
-                b: {
+                p_name: {
                     val: 'indu1',
                     type: oracledb.DB_TYPE_VARCHAR
                 },
-                res: {
+                p_cursor: {
                     type: oracledb.CURSOR,
                     dir: oracledb.BIND_OUT
                 }
@@ -130,7 +130,7 @@ export class OracleSpService {
                 outFormat: oracledb.OUT_FORMAT_OBJECT
             }
             );
-            let fres = await result.outBinds.res.getRows();
+            let fres = await result.outBinds.p_cursor.getRows();
 
             return fres
 
