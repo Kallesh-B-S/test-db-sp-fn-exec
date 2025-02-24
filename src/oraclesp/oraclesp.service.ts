@@ -140,4 +140,58 @@ export class OracleSpService {
         } finally {
         }
     }
+
+    async insertNewServiceProider(){
+        
+        let connection;
+        try {
+            // Connect to the Oracle database using oracledb 
+            connection = await this.dbService.getDataSource()
+            if (!connection) {
+                throw new Error('No DB Connected')
+            }
+
+            const result = await connection.execute(
+                `BEGIN
+                   sp1(:a,:b,:res);
+                 END;`, {
+                a: {
+                    val: "03",
+                    type: oracledb.DB_TYPE_VARCHAR
+                },
+                b: {
+                    val: 'indu1',
+                    type: oracledb.DB_TYPE_VARCHAR
+                },
+                res: {
+                    type: oracledb.CURSOR,
+                    dir: oracledb.BIND_OUT
+                }
+            }, {
+                outFormat: oracledb.OUT_FORMAT_OBJECT
+            }
+            );
+            let fres = await result.outBinds.res.getRows();
+
+            return fres
+
+        } catch (err) {
+            console.error('Error fetching users: ', err);
+            throw new Error('Error fetching users');
+        } finally {
+        }
+    
+    }
+
+    async updateServiceProider(){
+
+    }
+    async getAllServiceproviders(){}
+    async getSelectedServiceprovider(){}
+    async insertSPContacts(){}
+    async updateSPContacts(){}
+    async getSPcontacts(){}
+    async setSPDefaultcontact(){}
+    async inactivateSPContact(){}
+    async getSPDefaultcontact(){}
 }
