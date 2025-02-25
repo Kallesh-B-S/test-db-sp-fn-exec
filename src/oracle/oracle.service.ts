@@ -67,7 +67,7 @@ export class OracleService {
 
             const result = await connection.execute(
                 `BEGIN
-                       sp1(:p_region,:p_name,:p_cursor);
+                       USCIB_Managed_Pkg.InsertNewRegion(:p_region,:p_name,:p_cursor);
                      END;`, {
                 p_region: {
                     val: p_region,
@@ -110,7 +110,7 @@ export class OracleService {
 
             const result = await connection.execute(
                 `BEGIN
-                       sp1(:p_regionID,:p_name,:p_cursor);
+                       USCIB_Managed_Pkg.UpdateRegion(:p_regionID,:p_name,:p_cursor);
                      END;`, {
                 p_regionID: {
                     val: p_regionID,
