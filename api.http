@@ -1,0 +1,23 @@
+GET http://localhost:3000/oracle/GetRegions
+
+###
+
+POST http://localhost:3000/oracle/InsertRegions
+Content-Type: application/json
+
+{
+    "p_region":"p_region",
+    "p_name":"p_name"
+}
+
+###
+
+PATCH http://localhost:3000/oracle/UpdateRegion
+Content-Type: application/json
+
+{
+    "p_regionID": ,
+    "p_name":"p_name"
+}
+
+

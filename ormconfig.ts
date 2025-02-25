@@ -1,24 +1,24 @@
 import { DataSourceOptions } from 'typeorm';
 
 export const OracleConfig: any = {
-    type: 'oracle',
-    username: 'system',
-    password: 'root',
-    connectString: '192.168.1.96/xe',
+    // type: 'oracle',
+    user: 'Carnetsys',
+    password: 'Carnet1234',
+    connectString: '172.31.18.76/xe',
     // entities: [__dirname + '/**/*.entity{.ts,.js}'],
     // synchronize: true,
-    autoCommit: true
+    // autoCommit: true
   };
   
-  export const MssqlConfig: DataSourceOptions = {
-    type: 'mssql',
-    host: 'localhost',
-    port: 1433,
-    username: 'mssql1433',
-    password: 'root',
-    database: 'demo',
+  export const MssqlConfig: any = {
+    // type: 'mssql',
+    host: '172.31.18.76',
+    // port: 1433,
+    user: 'Carnetsys',
+    password: 'Carnet1234',
+    database: 'CarnetDB',
     // entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    synchronize: true,
+    // synchronize: true,
     options: {
       enableArithAbort: true,
       trustServerCertificate: true,

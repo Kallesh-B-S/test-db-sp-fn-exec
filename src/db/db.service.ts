@@ -1,54 +1,59 @@
-import { Injectable } from '@nestjs/common';
-import { MssqlConfig, OracleConfig } from 'ormconfig';
-import { DataSource, DataSourceOptions } from 'typeorm';
-import * as oracledb from 'oracledb';
+import { MssqlConfig , OracleConfig} from 'ormconfig';
+import { createPool, Pool, Connection as cob, } from 'oracledb';
+import { Connection, ConnectionPool } from 'mssql';
 
-@Injectable()
-export class DbService {
-    private dataSource: DataSource | null = null;
-    private oracleConnection: oracledb.Connection | null = null;
+export class OracleDBService {
+    private pool: Pool;
 
-    constructor() {}
-
-    async initialize(options: DataSourceOptions) {
-        if (options.type === 'oracle') {
-            this.oracleConnection = await oracledb.getConnection(options);
-        } else {
-            this.dataSource = new DataSource({
-                ...options,
-            });
-            await this.dataSource.initialize();
-            console.log('Data Source has been initialized!');
-        }
+    constructor() {
+        this.initializePool();
     }
 
-    getDataSource(): DataSource | oracledb.Connection | null {
-        if (this.oracleConnection) {
-            return this.oracleConnection; // Return the Oracle connection
-        }
-        return this.dataSource; // Return the TypeORM DataSource
+    private async initializePool() {
+        this.pool = await createPool({
+            ...OracleConfig,
+            poolMin: 1,
+            poolMax: 10,
+            poolIncrement: 1,
+        });
     }
 
-    getDbTypeConfig(type?: string): DataSourceOptions {
-        if (type === 'oracle') return OracleConfig;
-        else return MssqlConfig;
+    async getConnection(): Promise<cob> {
+        const connection = await this.pool.getConnection();
+        console.log('Database connection initialized successfully for oracle.');
+        return connection;
+    }
+}
+
+export class MssqlDBService {
+    private pool: ConnectionPool;
+    private readonly config = {
+        ...MssqlConfig,
+        server: "localhost",
+        pool: {
+            max: 10,
+            min: 0,
+            idleTimeoutMillis: 30000,
+        },
+    };
+
+    constructor() {
+        this.initializePool();
     }
 
-    async closeConnection() {
-        if (this.oracleConnection) {
-            try {
-                await this.oracleConnection.close(); // Close Oracle connection
-                console.log('Oracle connection has been closed!');
-            } catch (err) {
-                console.error('Error closing Oracle connection:', err);
-            }
-            this.oracleConnection = null;
-        } else if (this.dataSource) {
-            await this.dataSource.destroy();
-            console.log('Data Source has been closed!');
-            this.dataSource = null;
-        } else {
-            console.log('Data Source is not initialized.');
+    private async initializePool() {
+        this.pool = new ConnectionPool(this.config);
+    }
+
+    async getConnection(): Promise<Connection> {
+        try {
+            const connection = await this.pool.connect();
+            console.log('Database connection initialized successfully for Mssql.');
+            // console.log(`Connection established to server: ${this.config.server}`); // Log server info
+            return connection;
+        } catch (error) {
+            console.error('Error getting connection from pool', error.stack);
+            throw error; // Rethrow the error after logging
         }
     }
 }

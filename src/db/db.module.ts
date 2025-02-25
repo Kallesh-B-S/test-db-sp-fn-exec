@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
-import { DbService } from './db.service';
-import { DbController } from './db.controller';
+import { MssqlDBService, OracleDBService } from './db.service';
 
 @Module({
-  providers: [DbService],
-  controllers: [DbController],
-  exports:[DbService]
+  providers: [OracleDBService,MssqlDBService],
+  exports:[OracleDBService,MssqlDBService]
 })
 export class DbModule {}

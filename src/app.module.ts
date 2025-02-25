@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DbModule } from './db/db.module';
-import { OracleSpModule } from './oraclesp/oraclesp.module';
+import { OracleModule } from './oracle/oracle.module';
 
 @Module({
-  imports: [DbModule, OracleSpModule],
+  imports: [DbModule, OracleModule],
   controllers: [AppController],
   providers: [AppService],
 })
