@@ -1,6 +1,10 @@
+// GetRegions
+
 GET http://localhost:3000/oracle/GetRegions
 
 ###
+
+// InsertRegions
 
 POST http://localhost:3000/oracle/InsertRegions
 Content-Type: application/json
@@ -12,6 +16,8 @@ Content-Type: application/json
 
 ###
 
+//UpdateRegion
+
 PATCH http://localhost:3000/oracle/UpdateRegion
 Content-Type: application/json
 
@@ -19,5 +25,39 @@ Content-Type: application/json
     "p_regionID": ,
     "p_name":"p_name"
 }
+
+###
+
+// GetAllServiceproviders
+
+GET http://localhost:3000/oracle/GetAllServiceproviders
+
+###
+
+//InsertNewServiceProider
+
+POST http://localhost:3000/oracle/InsertNewServiceProider
+Content-Type: application/json
+
+{
+    "p_name": "Service Provider Name",
+    "p_lookupcode": "SP001",
+    "p_address1": "123 Main St",
+    "p_address2": "Suite 100",
+    "p_city": "Anytown",
+    "p_state": "CA",
+    "p_zip": "90210",
+    "p_country": "USA",
+    "p_issuingregion": "Region A",
+    "p_replacementregion": "Region B",
+    "p_bondsurety": "Surety Co.",
+    "p_cargopolicyno": "CP123456",
+    "p_cargosurety": "Cargo Surety Co.",
+    "p_user_id": "user123"
+}
+
+###
+
+//
 
 

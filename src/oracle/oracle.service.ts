@@ -424,10 +424,10 @@ export class OracleService {
                     rows = rows.concat(rowsBatch); // Append fetched rows to the main array
                 } while (rowsBatch.length > 0);
 
-                console.log('Rows fetched:', rows);
-
                 // Close the cursor after you're done
                 await cursor.close();
+
+                return rows;
             } else {
                 throw new Error('No cursor returned from the stored procedure');
             }
