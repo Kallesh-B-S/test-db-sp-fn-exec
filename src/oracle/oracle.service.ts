@@ -251,7 +251,7 @@ export class OracleService {
                 outFormat: oracledb.OUT_FORMAT_OBJECT
             }
             );
-            let fres = await result.outBinds.res.getRows();
+            let fres = await result.outBinds.p_cursor.getRows();
 
             return fres
 

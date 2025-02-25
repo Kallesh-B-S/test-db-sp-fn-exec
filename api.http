@@ -34,9 +34,9 @@ GET http://localhost:3000/oracle/GetAllServiceproviders
 
 ###
 
-//InsertNewServiceProider
+//InsertNewServiceProvider
 
-POST http://localhost:3000/oracle/InsertNewServiceProider
+POST http://localhost:3000/oracle/InsertNewServiceProvider
 Content-Type: application/json
 
 {
