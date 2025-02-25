@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MssqlConfig, MysqlConfig, OracleConfig } from 'ormconfig';
+import { MssqlConfig, OracleConfig } from 'ormconfig';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import * as oracledb from 'oracledb';
 

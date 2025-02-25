@@ -1,12 +1,13 @@
 import { DataSourceOptions } from 'typeorm';
 
-export const OracleConfig: DataSourceOptions = {
+export const OracleConfig: any = {
     type: 'oracle',
     username: 'system',
     password: 'root',
     connectString: '192.168.1.96/xe',
     // entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    synchronize: true, 
+    // synchronize: true,
+    autoCommit: true
   };
   
   export const MssqlConfig: DataSourceOptions = {
