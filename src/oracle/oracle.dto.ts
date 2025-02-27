@@ -146,3 +146,32 @@ export class InsertSPContactsDTO {
     p_user_id: string;
 }
 
+
+export class UpdateSPContactsDTO {
+    @IsNumber()
+    p_spcontactid: number;
+
+    @IsString()
+    p_firstname: string;
+
+    @IsString()
+    p_lastname: string;
+
+    @IsString()
+    p_title: string;
+
+    @IsString()
+    p_phoneno: string;
+
+    @IsString()
+    p_mobileno: string;
+
+    @IsString()
+    p_faxno: string;
+
+    @IsEmail()
+    p_emailaddress: string;
+
+    @IsString()
+    p_user_id: string;
+}

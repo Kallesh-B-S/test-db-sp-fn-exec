@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Patch, Post, Put } from '@nestjs/common';
 import { OracleService } from './oracle.service';
-import { GetSelectedServiceProviderDTO, GetSPcontactsDTO, InsertNewServiceProviderDTO, InsertRegionsDto, InsertSPContactsDTO, UpdateRegionDto, UpdateServiceProviderDTO } from './oracle.dto';
+import { GetSelectedServiceProviderDTO, GetSPcontactsDTO, InsertNewServiceProviderDTO, InsertRegionsDto, InsertSPContactsDTO, UpdateRegionDto, UpdateServiceProviderDTO, UpdateSPContactsDTO } from './oracle.dto';
 
 @Controller('oracle')
 export class OracleController {
@@ -81,6 +81,21 @@ export class OracleController {
     insertSPContacts(@Body() body: InsertSPContactsDTO){
         return this.oarcleService.insertSPContacts(
             body.p_spid,
+            body.p_firstname,
+            body.p_lastname,
+            body.p_title,
+            body.p_phoneno,
+            body.p_mobileno,
+            body.p_faxno,
+            body.p_emailaddress,
+            body.p_user_id
+        )
+    }
+
+    @Put('UpdateSPContacts')
+    updateSPContacts(@Body() body: UpdateSPContactsDTO){
+        return this.oarcleService.updateSPContacts(
+            body.p_spcontactid,
             body.p_firstname,
             body.p_lastname,
             body.p_title,

@@ -52,8 +52,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {
-        }
+        } finally { connection.close() }
     }
 
     async insertRegions(p_region: String, p_name: String) {
@@ -95,8 +94,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {
-        }
+        } finally { connection.close() }
     }
 
     async updateRegions(p_regionID: Number, p_name: String) {
@@ -138,8 +136,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {
-        }
+        } finally { connection.close() }
     }
 
     async insertNewServiceProvider(
@@ -258,8 +255,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {
-        }
+        } finally { connection.close() }
 
     }
 
@@ -384,8 +380,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {
-        }
+        } finally { connection.close() }
 
     }
 
@@ -437,8 +432,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {
-        }
+        } finally { connection.close() }
 
     }
 
@@ -494,8 +488,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {
-        }
+        } finally { connection.close() }
 
     }
 
@@ -550,8 +543,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {
-        }
+        } finally { connection.close() }
     }
 
     async insertSPContacts(
@@ -638,7 +630,214 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {
-        }
+        } finally { connection.close() }
+    }
+
+    async updateSPContacts(
+        p_spcontactid: number,
+        p_firstname: string,
+        p_lastname: string,
+        p_title: string,
+        p_phoneno: string,
+        p_mobileno: string,
+        p_faxno: string,
+        p_emailaddress: string,
+        p_user_id: string,
+    ) {
+        let connection;
+        try {
+            // Connect to the Oracle database using oracledb 
+            connection = await this.oracleDBService.getConnection()
+            if (!connection) {
+                throw new Error('No DB Connected')
+            }
+
+            const result = await connection.execute(
+                `BEGIN
+                   USCIB_Managed_Pkg.UpdateSPContacts(
+                    :p_spcontactid,
+                    :p_firstname,
+                    :p_lastname,
+                    :p_title,
+                    :p_phoneno,
+                    :p_mobileno,
+                    :p_faxno,
+                    :p_emailaddress,
+                    :p_user_id,
+                    :p_cursor);
+                 END;`, {
+                p_spcontactid: {
+                    val: p_spcontactid,
+                    type: oracledb.DB_TYPE_NUMBER
+                },
+                p_firstname: {
+                    val: p_firstname,
+                    type: oracledb.DB_TYPE_VARCHAR
+                },
+                p_lastname: {
+                    val: p_lastname,
+                    type: oracledb.DB_TYPE_VARCHAR
+                },
+                p_title: {
+                    val: p_title,
+                    type: oracledb.DB_TYPE_VARCHAR
+                },
+                p_phoneno: {
+                    val: p_phoneno,
+                    type: oracledb.DB_TYPE_VARCHAR
+                },
+                p_mobileno: {
+                    val: p_mobileno,
+                    type: oracledb.DB_TYPE_VARCHAR
+                },
+                p_faxno: {
+                    val: p_faxno,
+                    type: oracledb.DB_TYPE_VARCHAR
+                },
+                p_emailaddress: {
+                    val: p_emailaddress,
+                    type: oracledb.DB_TYPE_VARCHAR
+                },
+                p_user_id: {
+                    val: p_user_id,
+                    type: oracledb.DB_TYPE_VARCHAR
+                },
+                p_cursor: {
+                    type: oracledb.CURSOR,
+                    dir: oracledb.BIND_OUT
+                }
+            }, {
+                outFormat: oracledb.OUT_FORMAT_OBJECT
+            }
+            );
+            let fres = await result.outBinds.p_cursor.getRows();
+
+            return fres
+
+        } catch (err) {
+            console.error('Error fetching users: ', err);
+            throw new Error('Error fetching users');
+        } finally { connection.close() }
+    }
+
+    async getSPDefaultcontact(p_SPid: number) {
+
+        let connection;
+        let rows = [];
+        try {
+            // Connect to the Oracle database using oracledb 
+            connection = await this.oracleDBService.getConnection()
+            if (!connection) {
+                throw new Error('No DB Connected')
+            }
+
+            const result = await connection.execute(
+                `BEGIN
+                    USCIB_Managed_Pkg.GetSPDefaultContacts(:p_SPid,:p_cursor);
+                END;`,
+                {
+                    p_SPid: {
+                        val: p_SPid,
+                        type: oracledb.DB_TYPE_NUMBER,
+                    },
+                    p_cursor: {
+                        type: oracledb.CURSOR,
+                        dir: oracledb.BIND_OUT
+                    }
+                },
+                {
+                    outFormat: oracledb.OUT_FORMAT_OBJECT
+                }
+            );
+
+            if (result.outBinds && result.outBinds.p_cursor) {
+                const cursor = result.outBinds.p_cursor; // The OUT cursor
+                let rowsBatch;
+
+                do {
+                    rowsBatch = await cursor.getRows(100); // Fetch 100 rows at a time
+                    rows = rows.concat(rowsBatch); // Append fetched rows to the main array
+                } while (rowsBatch.length > 0);
+
+                console.log('Rows fetched:', rows);
+
+                // Close the cursor after you're done
+                await cursor.close();
+            } else {
+                throw new Error('No cursor returned from the stored procedure');
+            }
+
+            return rows;
+
+        } catch (err) {
+            console.error('Error fetching users: ', err);
+            throw new Error('Error fetching users');
+        } finally { connection.close() }
+
+    }
+
+    async setSPDefaultcontact(p_spcontactid: number) {
+
+        let connection;
+        try {
+            // Connect to the Oracle database using oracledb 
+            connection = await this.oracleDBService.getConnection()
+            if (!connection) {
+                throw new Error('No DB Connected')
+            }
+
+            const result = await connection.execute(
+                `BEGIN
+                    USCIB_Managed_Pkg.SetDefaultContact(:p_spcontactid);
+                END;`,
+                {
+                    p_spcontactid: {
+                        val: p_spcontactid,
+                        type: oracledb.DB_TYPE_NUMBER
+                    },
+                }
+            );
+
+            await connection.commit();
+
+            return "SP executed successfully"
+
+        } catch (err) {
+            console.error('Error fetching users: ', err);
+            throw new Error('Error fetching users');
+        } finally { connection.close() }
+
+    }
+
+    async inactivateSPContact(p_spcontactid: number) {
+
+        let connection;
+        try {
+            // Connect to the Oracle database using oracledb 
+            connection = await this.oracleDBService.getConnection()
+            if (!connection) {
+                throw new Error('No DB Connected')
+            }
+
+            const result = await connection.execute(
+                `BEGIN
+                       USCIB_Managed_Pkg.InActivateSPContacts(:p_spcontactid);
+                     END;`, {
+                p_spcontactid: {
+                    val: p_spcontactid,
+                    type: oracledb.DB_TYPE_NUMBER
+                }
+            }
+            );
+
+            await connection.commit();
+
+            return "SP executed successfully"
+
+        } catch (err) {
+            console.error('Error fetching users: ', err);
+            throw new Error('Error fetching users');
+        } finally { connection.close() }
+
     }
 }
