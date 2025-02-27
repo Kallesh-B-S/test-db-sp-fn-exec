@@ -34,6 +34,12 @@ GET http://localhost:3000/oracle/GetAllServiceproviders
 
 ###
 
+//GetSelectedServiceprovider
+
+GET http://localhost:3000/oracle/GetSelectedServiceprovider
+
+###
+
 //InsertNewServiceProvider
 
 POST http://localhost:3000/oracle/InsertNewServiceProvider
@@ -58,6 +64,78 @@ Content-Type: application/json
 
 ###
 
-//
+//UpdateServiceProvider
+
+PUT http://localhost:3000/oracle/UpdateServiceProvider
+Content-Type: application/json
+
+{
+    "p_spid": 1,
+    "p_name": "Service Provider Name",
+    "p_lookupcode": "SP001",
+    "p_address1": "123 Main St",
+    "p_address2": "Suite 100",
+    "p_city": "Anytown",
+    "p_state": "CA",
+    "p_zip": "90210",
+    "p_country": "USA",
+    "p_issuingregion": "Region A",
+    "p_replacementregion": "Region B",
+    "p_bondsurety": "Surety Co.",
+    "p_cargopolicyno": "CP123456",
+    "p_cargosurety": "Cargo Surety Co.",
+    "p_user_id": "user123"
+}
+
+
+//GetSPcontacts
+
+GET http://localhost:3000/oracle/GetSPcontacts
+
+###
+
+//GetSPDefaultcontact
+
+###
+
+//InsertSPContacts
+
+POST http://localhost:3000/oracle/InsertSPContacts
+Content-Type: application/json
+
+{
+    "p_name": "Service Provider Name",
+    "p_lookupcode": "SP001",
+    "p_address1": "123 Main St",
+    "p_address2": "Suite 100",
+    "p_city": "Anytown",
+    "p_state": "CA",
+    "p_zip": "90210",
+    "p_country": "USA",
+    "p_issuingregion": "Region A",
+    "p_replacementregion": "Region B",
+    "p_bondsurety": "Surety Co.",
+    "p_cargopolicyno": "CP123456",
+    "p_cargosurety": "Cargo Surety Co.",
+    "p_user_id": "user123"
+}
+
+###
+
+//UpdateSPContacts
+
+
+###
+
+//SetSPDefaultcontact
+
+
+###
+
+//InactivateSPContact
+
+
+
+###
 
 
