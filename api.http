@@ -36,12 +36,7 @@ GET http://localhost:3000/oracle/GetAllServiceproviders
 
 //GetSelectedServiceprovider
 
-GET http://localhost:3000/oracle/GetSelectedServiceprovider
-Content-Type: application/json
-
-{
-    "p_spid":12
-}
+GET http://localhost:3000/oracle/GetSelectedServiceprovider/12
 
 ###
 
@@ -96,16 +91,13 @@ Content-Type: application/json
 
 //GetSPcontacts
 
-GET http://localhost:3000/oracle/GetSPcontacts
-Content-Type: application/json
-
-{
-    "p_SPid":12
-}
+GET http://localhost:3000/oracle/GetSPcontacts/12
 
 ###
 
 //GetSPDefaultcontact
+
+GET http://localhost:3000/oracle/GetSPDefaultcontact/12
 
 ###
 
@@ -149,12 +141,13 @@ Content-Type: application/json
 
 //SetSPDefaultcontact
 
+POST http://localhost:3000/oracle/SetSPDefaultcontact/12
 
 ###
 
 //InactivateSPContact
 
-
+POST http://localhost:3000/oracle/InactivateSPContact/12
 
 ###
 

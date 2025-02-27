@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Put } from '@nestjs/common';
 import { OracleService } from './oracle.service';
 import { GetSelectedServiceProviderDTO, GetSPcontactsDTO, InsertNewServiceProviderDTO, InsertRegionsDto, InsertSPContactsDTO, UpdateRegionDto, UpdateServiceProviderDTO, UpdateSPContactsDTO } from './oracle.dto';
 
@@ -26,9 +26,9 @@ export class OracleController {
         return this.oarcleService.getAllServiceproviders();
     }
 
-    @Get('/GetSelectedServiceprovider')
-    getSelectedServiceprovider(@Body() body: GetSelectedServiceProviderDTO) {
-        return this.oarcleService.getSelectedServiceprovider(body.p_spid);
+    @Get('/GetSelectedServiceprovider/:id')
+    getSelectedServiceprovider(@Param('id', ParseIntPipe) id:number) {
+        return this.oarcleService.getSelectedServiceprovider(id);
     }
 
     @Post('/InsertNewServiceProvider')
@@ -72,12 +72,17 @@ export class OracleController {
         )
     }
 
-    @Get('/GetSPcontacts')
-    getSPcontacts(@Body() body: GetSPcontactsDTO) {
-        return this.oarcleService.getSPcontacts(body.p_SPid);
+    @Get('/GetSPcontacts/:id')
+    getSPcontacts(@Param('id', ParseIntPipe) id:number) {
+        return this.oarcleService.getSPcontacts(id);
     }
 
-    @Post('InsertSPContacts')
+    @Get('/GetSPDefaultcontact/:id')
+    getSPDefaultcontact(@Param('id', ParseIntPipe) id:number){
+        return this.oarcleService.getSPDefaultcontact(id)
+    }
+
+    @Post('/InsertSPContacts')
     insertSPContacts(@Body() body: InsertSPContactsDTO){
         return this.oarcleService.insertSPContacts(
             body.p_spid,
@@ -92,7 +97,7 @@ export class OracleController {
         )
     }
 
-    @Put('UpdateSPContacts')
+    @Put('/UpdateSPContacts')
     updateSPContacts(@Body() body: UpdateSPContactsDTO){
         return this.oarcleService.updateSPContacts(
             body.p_spcontactid,
@@ -106,4 +111,16 @@ export class OracleController {
             body.p_user_id
         )
     }
+
+    @Post('/SetSPDefaultcontact/:id')
+    setSPDefaultcontact(@Param('id', ParseIntPipe) id:number){
+        return this.oarcleService.setSPDefaultcontact(id)
+    }
+
+    @Post('/InactivateSPContact/:id')
+    inactivateSPContact(@Param('id', ParseIntPipe) id:number){
+        return this.oarcleService.inactivateSPContact(id)
+    }
+
+    
 }
