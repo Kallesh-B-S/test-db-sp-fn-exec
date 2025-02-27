@@ -37,6 +37,11 @@ GET http://localhost:3000/oracle/GetAllServiceproviders
 //GetSelectedServiceprovider
 
 GET http://localhost:3000/oracle/GetSelectedServiceprovider
+Content-Type: application/json
+
+{
+    "p_spid":12
+}
 
 ###
 
@@ -87,10 +92,16 @@ Content-Type: application/json
     "p_user_id": "user123"
 }
 
+###
 
 //GetSPcontacts
 
 GET http://localhost:3000/oracle/GetSPcontacts
+Content-Type: application/json
+
+{
+    "p_SPid":12
+}
 
 ###
 
@@ -119,7 +130,7 @@ Content-Type: application/json
 
 //UpdateSPContacts
 
-POST http://localhost:3000/oracle/InsertSPContacts
+PUT http://localhost:3000/oracle/UpdateSPContacts
 Content-Type: application/json
 
 {

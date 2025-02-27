@@ -52,7 +52,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally { connection.close() }
+        } finally {  }
     }
 
     async insertRegions(p_region: String, p_name: String) {
@@ -94,7 +94,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally { connection.close() }
+        } finally {  }
     }
 
     async updateRegions(p_regionID: Number, p_name: String) {
@@ -136,7 +136,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally { connection.close() }
+        } finally {  }
     }
 
     async insertNewServiceProvider(
@@ -255,7 +255,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally { connection.close() }
+        } finally {  }
 
     }
 
@@ -380,7 +380,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally { connection.close() }
+        } finally {  }
 
     }
 
@@ -427,12 +427,10 @@ export class OracleService {
                 throw new Error('No cursor returned from the stored procedure');
             }
 
-            return rows;
-
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally { connection.close() }
+        } finally {  }
 
     }
 
@@ -488,7 +486,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally { connection.close() }
+        } finally {  }
 
     }
 
@@ -543,7 +541,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally { connection.close() }
+        } finally {  }
     }
 
     async insertSPContacts(
@@ -630,7 +628,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally { connection.close() }
+        } finally {  }
     }
 
     async updateSPContacts(
@@ -717,7 +715,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally { connection.close() }
+        } finally {  }
     }
 
     async getSPDefaultcontact(p_SPid: number) {
@@ -772,7 +770,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally { connection.close() }
+        } finally {  }
 
     }
 
@@ -805,7 +803,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally { connection.close() }
+        } finally {  }
 
     }
 
@@ -837,7 +835,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally { connection.close() }
+        } finally {  }
 
     }
 }
