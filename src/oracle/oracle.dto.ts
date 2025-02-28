@@ -1,4 +1,4 @@
-import { IsEmail, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsNumber, IsString } from 'class-validator';
 
 export class InsertRegionsDto {
     @IsString()
@@ -16,10 +16,10 @@ export class UpdateRegionDto {
     p_name: string;
 }
 
-export class GetSelectedServiceProviderDTO {
-    @IsNumber()
-    p_spid: number;
-}
+// export class GetSelectedServiceProviderDTO {
+//     @IsNumber()
+//     p_spid: number;
+// }
 
 export class InsertNewServiceProviderDTO {
     @IsString()
@@ -112,14 +112,17 @@ export class UpdateServiceProviderDTO {
     p_user_id: string;
 }
 
-export class GetSPcontactsDTO {
-    @IsNumber()
-    p_SPid: number;
-}
+// export class GetSPcontactsDTO {
+//     @IsNumber()
+//     p_SPid: number;
+// }
 
 export class InsertSPContactsDTO {
     @IsNumber()
     p_spid: number;
+
+    @IsString()
+    p_defcontactflag: string;
 
     @IsString()
     p_firstname: string;
@@ -145,7 +148,6 @@ export class InsertSPContactsDTO {
     @IsString()
     p_user_id: string;
 }
-
 
 export class UpdateSPContactsDTO {
     @IsNumber()
@@ -174,4 +176,17 @@ export class UpdateSPContactsDTO {
 
     @IsString()
     p_user_id: string;
+}
+
+export class CreateCarnetSequenceDTO {
+    @IsNumber()
+    p_spid: number;
+    @IsNumber()
+    p_regionid: number;
+    @IsNumber()
+    p_startnumber: number;
+    @IsNumber()
+    p_endnumber: number;
+    @IsString()
+    p_carnettype: string
 }

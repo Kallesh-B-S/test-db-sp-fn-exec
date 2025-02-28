@@ -6,6 +6,92 @@ import * as oracledb from 'oracledb'
 export class OracleService {
     constructor(private readonly oracleDBService: OracleDBService) { }
 
+    // Regions API
+
+    async insertRegions(p_region: String, p_name: String) {
+        let connection;
+        try {
+            // Connect to the Oracle database using oracledb 
+            connection = await this.oracleDBService.getConnection()
+            if (!connection) {
+                throw new Error('No DB Connected')
+            }
+
+            const result = await connection.execute(
+                `BEGIN
+                       USCIB_Managed_Pkg.InsertNewRegion(:p_region,:p_name,:p_cursor);
+                     END;`, {
+                p_region: {
+                    val: p_region,
+                    type: oracledb.DB_TYPE_VARCHAR
+                },
+                p_name: {
+                    val: p_name,
+                    type: oracledb.DB_TYPE_VARCHAR
+                },
+                p_cursor: {
+                    type: oracledb.CURSOR,
+                    dir: oracledb.BIND_OUT
+                }
+            }, {
+                outFormat: oracledb.OUT_FORMAT_OBJECT
+            }
+            );
+
+            await connection.commit();
+
+            let fres = await result.outBinds.p_cursor.getRows();
+
+            return fres
+
+        } catch (err) {
+            console.error('Error fetching users: ', err);
+            throw new Error('Error fetching users');
+        } finally { }
+    }
+
+    async updateRegions(p_regionID: Number, p_name: String) {
+        let connection;
+        try {
+            // Connect to the Oracle database using oracledb 
+            connection = await this.oracleDBService.getConnection()
+            if (!connection) {
+                throw new Error('No DB Connected')
+            }
+
+            const result = await connection.execute(
+                `BEGIN
+                       USCIB_Managed_Pkg.UpdateRegion(:p_regionID,:p_name,:p_cursor);
+                     END;`, {
+                p_regionID: {
+                    val: p_regionID,
+                    type: oracledb.DB_TYPE_NUMBER
+                },
+                p_name: {
+                    val: p_name,
+                    type: oracledb.DB_TYPE_VARCHAR
+                },
+                p_cursor: {
+                    type: oracledb.CURSOR,
+                    dir: oracledb.BIND_OUT
+                }
+            }, {
+                outFormat: oracledb.OUT_FORMAT_OBJECT
+            }
+            );
+
+            await connection.commit();
+
+            let fres = await result.outBinds.p_cursor.getRows();
+
+            return fres
+
+        } catch (err) {
+            console.error('Error fetching users: ', err);
+            throw new Error('Error fetching users');
+        } finally { }
+    }
+
     async getRegions() {
         let connection;
         let rows = [];
@@ -52,92 +138,10 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {  }
+        } finally { }
     }
 
-    async insertRegions(p_region: String, p_name: String) {
-        let connection;
-        try {
-            // Connect to the Oracle database using oracledb 
-            connection = await this.oracleDBService.getConnection()
-            if (!connection) {
-                throw new Error('No DB Connected')
-            }
-
-            const result = await connection.execute(
-                `BEGIN
-                       USCIB_Managed_Pkg.InsertNewRegion(:p_region,:p_name,:p_cursor);
-                     END;`, {
-                p_region: {
-                    val: p_region,
-                    type: oracledb.DB_TYPE_VARCHAR
-                },
-                p_name: {
-                    val: p_name,
-                    type: oracledb.DB_TYPE_VARCHAR
-                },
-                p_cursor: {
-                    type: oracledb.CURSOR,
-                    dir: oracledb.BIND_OUT
-                }
-            }, {
-                outFormat: oracledb.OUT_FORMAT_OBJECT
-            }
-            );
-
-            await connection.commit();
-
-            let fres = await result.outBinds.p_cursor.getRows();
-
-            return fres
-
-        } catch (err) {
-            console.error('Error fetching users: ', err);
-            throw new Error('Error fetching users');
-        } finally {  }
-    }
-
-    async updateRegions(p_regionID: Number, p_name: String) {
-        let connection;
-        try {
-            // Connect to the Oracle database using oracledb 
-            connection = await this.oracleDBService.getConnection()
-            if (!connection) {
-                throw new Error('No DB Connected')
-            }
-
-            const result = await connection.execute(
-                `BEGIN
-                       USCIB_Managed_Pkg.UpdateRegion(:p_regionID,:p_name,:p_cursor);
-                     END;`, {
-                p_regionID: {
-                    val: p_regionID,
-                    type: oracledb.DB_TYPE_NUMBER
-                },
-                p_name: {
-                    val: p_name,
-                    type: oracledb.DB_TYPE_VARCHAR
-                },
-                p_cursor: {
-                    type: oracledb.CURSOR,
-                    dir: oracledb.BIND_OUT
-                }
-            }, {
-                outFormat: oracledb.OUT_FORMAT_OBJECT
-            }
-            );
-
-            await connection.commit();
-
-            let fres = await result.outBinds.p_cursor.getRows();
-
-            return fres
-
-        } catch (err) {
-            console.error('Error fetching users: ', err);
-            throw new Error('Error fetching users');
-        } finally {  }
-    }
+    // Servipe provider [ SP ]
 
     async insertNewServiceProvider(
         p_name: String,
@@ -255,7 +259,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {  }
+        } finally { }
 
     }
 
@@ -380,7 +384,7 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {  }
+        } finally { }
 
     }
 
@@ -430,11 +434,11 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {  }
+        } finally { }
 
     }
 
-    async getSelectedServiceprovider(p_spid: Number) {
+    async getServiceproviderByID(p_spid: Number) {
 
         let connection;
         let rows = [];
@@ -486,66 +490,15 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {  }
+        } finally { }
 
     }
 
-    async getSPcontacts(p_SPid: number) {
-        let connection;
-        let rows = [];
-        try {
-            // Connect to the Oracle database using oracledb 
-            connection = await this.oracleDBService.getConnection()
-            if (!connection) {
-                throw new Error('No DB Connected')
-            }
-
-            const result = await connection.execute(
-                `BEGIN
-                    USCIB_Managed_Pkg.GetSPAllContacts(:p_SPid,:p_cursor);
-                END;`,
-                {
-                    p_SPid: {
-                        val: p_SPid,
-                        type: oracledb.DB_TYPE_NUMBER,
-                    },
-                    p_cursor: {
-                        type: oracledb.CURSOR,
-                        dir: oracledb.BIND_OUT
-                    }
-                },
-                {
-                    outFormat: oracledb.OUT_FORMAT_OBJECT
-                }
-            );
-
-            if (result.outBinds && result.outBinds.p_cursor) {
-                const cursor = result.outBinds.p_cursor; // The OUT cursor
-                let rowsBatch;
-
-                do {
-                    rowsBatch = await cursor.getRows(100); // Fetch 100 rows at a time
-                    rows = rows.concat(rowsBatch); // Append fetched rows to the main array
-                } while (rowsBatch.length > 0);
-
-                console.log('Rows fetched:', rows);
-
-                // Close the cursor after you're done
-                await cursor.close();
-            } else {
-                throw new Error('No cursor returned from the stored procedure');
-            }
-
-            return rows;
-
-        } catch (err) {
-            console.error('Error fetching users: ', err);
-            throw new Error('Error fetching users');
-        } finally {  }
-    }
+    // Service provider contacts [ SPContacts ] 
 
     async insertSPContacts(
         p_spid: number,
+        p_defcontactflag: string,
         p_firstname: string,
         p_lastname: string,
         p_title: string,
@@ -567,6 +520,7 @@ export class OracleService {
                 `BEGIN
                    USCIB_Managed_Pkg.InsertSPContacts(
                     :p_spid,
+                    :p_defcontactflag,
                     :p_firstname,
                     :p_lastname,
                     :p_title,
@@ -580,6 +534,10 @@ export class OracleService {
                 p_spid: {
                     val: p_spid,
                     type: oracledb.DB_TYPE_NUMBER
+                },
+                p_defcontactflag: {
+                    val: p_defcontactflag,
+                    type: oracledb.DB_TYPE_VARCHAR
                 },
                 p_firstname: {
                     val: p_firstname,
@@ -628,7 +586,40 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {  }
+        } finally { }
+    }
+
+    async setSPDefaultcontact(p_spcontactid: number) {
+
+        let connection;
+        try {
+            // Connect to the Oracle database using oracledb 
+            connection = await this.oracleDBService.getConnection()
+            if (!connection) {
+                throw new Error('No DB Connected')
+            }
+
+            const result = await connection.execute(
+                `BEGIN
+                    USCIB_Managed_Pkg.SetDefaultContact(:p_spcontactid);
+                END;`,
+                {
+                    p_spcontactid: {
+                        val: p_spcontactid,
+                        type: oracledb.DB_TYPE_NUMBER
+                    },
+                }
+            );
+
+            await connection.commit();
+
+            return "SP executed successfully"
+
+        } catch (err) {
+            console.error('Error fetching users: ', err);
+            throw new Error('Error fetching users');
+        } finally { }
+
     }
 
     async updateSPContacts(
@@ -715,10 +706,42 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {  }
+        } finally { }
     }
 
-    async getSPDefaultcontact(p_SPid: number) {
+    async inactivateSPContact(p_spcontactid: number) {
+
+        let connection;
+        try {
+            // Connect to the Oracle database using oracledb 
+            connection = await this.oracleDBService.getConnection()
+            if (!connection) {
+                throw new Error('No DB Connected')
+            }
+
+            const result = await connection.execute(
+                `BEGIN
+                       USCIB_Managed_Pkg.InActivateSPContacts(:p_spcontactid);
+                     END;`, {
+                p_spcontactid: {
+                    val: p_spcontactid,
+                    type: oracledb.DB_TYPE_NUMBER
+                }
+            }
+            );
+
+            await connection.commit();
+
+            return "SP executed successfully"
+
+        } catch (err) {
+            console.error('Error fetching users: ', err);
+            throw new Error('Error fetching users');
+        } finally { }
+
+    }
+
+    async getSPDefaultcontacts(p_SPid: number) {
 
         let connection;
         let rows = [];
@@ -757,6 +780,55 @@ export class OracleService {
                     rows = rows.concat(rowsBatch); // Append fetched rows to the main array
                 } while (rowsBatch.length > 0);
 
+                // Close the cursor after you're done
+                await cursor.close();
+            } else {
+                throw new Error('No cursor returned from the stored procedure');
+            }
+
+            return rows;
+
+        } catch (err) {
+            console.error('Error fetching users: ', err);
+            throw new Error('Error fetching users');
+        } finally { }
+
+    }
+
+    async getSPcontacts() {
+        let connection;
+        let rows = [];
+        try {
+            // Connect to the Oracle database using oracledb 
+            connection = await this.oracleDBService.getConnection()
+            if (!connection) {
+                throw new Error('No DB Connected')
+            }
+
+            const result = await connection.execute(
+                `BEGIN
+                    USCIB_Managed_Pkg.GetSPAllContacts(:p_cursor);
+                END;`,
+                {
+                    p_cursor: {
+                        type: oracledb.CURSOR,
+                        dir: oracledb.BIND_OUT
+                    }
+                },
+                {
+                    outFormat: oracledb.OUT_FORMAT_OBJECT
+                }
+            );
+
+            if (result.outBinds && result.outBinds.p_cursor) {
+                const cursor = result.outBinds.p_cursor; // The OUT cursor
+                let rowsBatch;
+
+                do {
+                    rowsBatch = await cursor.getRows(100); // Fetch 100 rows at a time
+                    rows = rows.concat(rowsBatch); // Append fetched rows to the main array
+                } while (rowsBatch.length > 0);
+
                 console.log('Rows fetched:', rows);
 
                 // Close the cursor after you're done
@@ -770,12 +842,18 @@ export class OracleService {
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {  }
-
+        } finally { }
     }
 
-    async setSPDefaultcontact(p_spcontactid: number) {
+    // CarnetSequence
 
+    async createCarnetSequence(
+        p_spid: number,
+        p_regionid: number,
+        p_startnumber: number,
+        p_endnumber: number,
+        p_carnettype: string
+    ) {
         let connection;
         try {
             // Connect to the Oracle database using oracledb 
@@ -786,56 +864,101 @@ export class OracleService {
 
             const result = await connection.execute(
                 `BEGIN
-                    USCIB_Managed_Pkg.SetDefaultContact(:p_spcontactid);
+                   USCIB_Managed_Pkg.CreateCarnetSequence(
+                    :p_spid,
+                    :p_regionid,
+                    :p_startnumber,
+                    :p_endnumber,
+                    :p_carnettype,
+                    :p_cursor);
+                 END;`, {
+                p_spid: {
+                    val: p_spid,
+                    type: oracledb.DB_TYPE_NUMBER
+                },
+                p_regionid: {
+                    val: p_regionid,
+                    type: oracledb.DB_TYPE_NUMBER
+                },
+                p_startnumber: {
+                    val: p_startnumber,
+                    type: oracledb.DB_TYPE_NUMBER
+                },
+                p_endnumber: {
+                    val: p_endnumber,
+                    type: oracledb.DB_TYPE_NUMBER
+                },
+                p_carnettype: {
+                    val: p_carnettype,
+                    type: oracledb.DB_TYPE_VARCHAR
+                },
+                p_cursor: {
+                    type: oracledb.CURSOR,
+                    dir: oracledb.BIND_OUT
+                }
+            }, {
+                outFormat: oracledb.OUT_FORMAT_OBJECT
+            }
+            );
+            let fres = await result.outBinds.p_cursor.getRows();
+
+            return fres
+
+        } catch (err) {
+            console.error('Error fetching users: ', err);
+            throw new Error('Error fetching users');
+        } finally { }
+    }
+
+    async getCarnetSequence(p_spid: number) {
+        let connection;
+        let rows = [];
+        try {
+            // Connect to the Oracle database using oracledb 
+            connection = await this.oracleDBService.getConnection()
+            if (!connection) {
+                throw new Error('No DB Connected')
+            }
+
+            const result = await connection.execute(
+                `BEGIN
+                    USCIB_Managed_Pkg.GetCarnetSequence(:p_spid,:p_cursor);
                 END;`,
                 {
-                    p_spcontactid: {
-                        val: p_spcontactid,
-                        type: oracledb.DB_TYPE_NUMBER
+                    p_spid: {
+                        val: p_spid,
+                        type: oracledb.DB_TYPE_NUMBER,
                     },
+                    p_cursor: {
+                        type: oracledb.CURSOR,
+                        dir: oracledb.BIND_OUT
+                    }
+                },
+                {
+                    outFormat: oracledb.OUT_FORMAT_OBJECT
                 }
             );
 
-            await connection.commit();
+            if (result.outBinds && result.outBinds.p_cursor) {
+                const cursor = result.outBinds.p_cursor; // The OUT cursor
+                let rowsBatch;
 
-            return "SP executed successfully"
+                do {
+                    rowsBatch = await cursor.getRows(100); // Fetch 100 rows at a time
+                    rows = rows.concat(rowsBatch); // Append fetched rows to the main array
+                } while (rowsBatch.length > 0);
+
+                // Close the cursor after you're done
+                await cursor.close();
+            } else {
+                throw new Error('No cursor returned from the stored procedure');
+            }
+
+            return rows;
 
         } catch (err) {
             console.error('Error fetching users: ', err);
             throw new Error('Error fetching users');
-        } finally {  }
-
-    }
-
-    async inactivateSPContact(p_spcontactid: number) {
-
-        let connection;
-        try {
-            // Connect to the Oracle database using oracledb 
-            connection = await this.oracleDBService.getConnection()
-            if (!connection) {
-                throw new Error('No DB Connected')
-            }
-
-            const result = await connection.execute(
-                `BEGIN
-                       USCIB_Managed_Pkg.InActivateSPContacts(:p_spcontactid);
-                     END;`, {
-                p_spcontactid: {
-                    val: p_spcontactid,
-                    type: oracledb.DB_TYPE_NUMBER
-                }
-            }
-            );
-
-            await connection.commit();
-
-            return "SP executed successfully"
-
-        } catch (err) {
-            console.error('Error fetching users: ', err);
-            throw new Error('Error fetching users');
-        } finally {  }
-
+        } finally { }
     }
 }

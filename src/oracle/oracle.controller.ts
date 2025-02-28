@@ -1,15 +1,12 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Put } from '@nestjs/common';
 import { OracleService } from './oracle.service';
-import { GetSelectedServiceProviderDTO, GetSPcontactsDTO, InsertNewServiceProviderDTO, InsertRegionsDto, InsertSPContactsDTO, UpdateRegionDto, UpdateServiceProviderDTO, UpdateSPContactsDTO } from './oracle.dto';
+import { CreateCarnetSequenceDTO, InsertNewServiceProviderDTO, InsertRegionsDto, InsertSPContactsDTO, UpdateRegionDto, UpdateServiceProviderDTO, UpdateSPContactsDTO } from './oracle.dto';
 
 @Controller('oracle')
 export class OracleController {
     constructor(private readonly oarcleService: OracleService) { }
 
-    @Get('/GetRegions')
-    getRegions() {
-        return this.oarcleService.getRegions();
-    }
+    // Regions
 
     @Post('/InsertRegions')
     insertRegions(@Body() body: InsertRegionsDto) {
@@ -21,15 +18,12 @@ export class OracleController {
         return this.oarcleService.updateRegions(body.p_regionID, body.p_name);
     }
 
-    @Get('GetAllServiceproviders')
-    getAllServiceproviders() {
-        return this.oarcleService.getAllServiceproviders();
+    @Get('/GetRegions')
+    getRegions() {
+        return this.oarcleService.getRegions();
     }
 
-    @Get('/GetSelectedServiceprovider/:id')
-    getSelectedServiceprovider(@Param('id', ParseIntPipe) id:number) {
-        return this.oarcleService.getSelectedServiceprovider(id);
-    }
+    // Service Provider [ SP ]
 
     @Post('/InsertNewServiceProvider')
     insertNewServiceProvider(@Body() body: InsertNewServiceProviderDTO) {
@@ -72,35 +66,24 @@ export class OracleController {
         )
     }
 
-    @Get('/GetSPcontacts/:id')
-    getSPcontacts(@Param('id', ParseIntPipe) id:number) {
-        return this.oarcleService.getSPcontacts(id);
+    @Get('GetAllServiceproviders')
+    getAllServiceproviders() {
+        return this.oarcleService.getAllServiceproviders();
     }
 
-    @Get('/GetSPDefaultcontact/:id')
-    getSPDefaultcontact(@Param('id', ParseIntPipe) id:number){
-        return this.oarcleService.getSPDefaultcontact(id)
+    @Get('/GetSelectedServiceprovider/:id')
+    getSelectedServiceprovider(@Param('id', ParseIntPipe) id:number) {
+        return this.oarcleService.getServiceproviderByID(id);
     }
 
+    
+    // SPContacts
+    
     @Post('/InsertSPContacts')
     insertSPContacts(@Body() body: InsertSPContactsDTO){
         return this.oarcleService.insertSPContacts(
             body.p_spid,
-            body.p_firstname,
-            body.p_lastname,
-            body.p_title,
-            body.p_phoneno,
-            body.p_mobileno,
-            body.p_faxno,
-            body.p_emailaddress,
-            body.p_user_id
-        )
-    }
-
-    @Put('/UpdateSPContacts')
-    updateSPContacts(@Body() body: UpdateSPContactsDTO){
-        return this.oarcleService.updateSPContacts(
-            body.p_spcontactid,
+            body.p_defcontactflag,
             body.p_firstname,
             body.p_lastname,
             body.p_title,
@@ -116,11 +99,52 @@ export class OracleController {
     setSPDefaultcontact(@Param('id', ParseIntPipe) id:number){
         return this.oarcleService.setSPDefaultcontact(id)
     }
+  
+    @Put('/UpdateSPContacts')
+    updateSPContacts(@Body() body: UpdateSPContactsDTO){
+        return this.oarcleService.updateSPContacts(
+            body.p_spcontactid,
+            body.p_firstname,
+            body.p_lastname,
+            body.p_title,
+            body.p_phoneno,
+            body.p_mobileno,
+            body.p_faxno,
+            body.p_emailaddress,
+            body.p_user_id
+        )
+    }
 
     @Post('/InactivateSPContact/:id')
     inactivateSPContact(@Param('id', ParseIntPipe) id:number){
         return this.oarcleService.inactivateSPContact(id)
     }
 
-    
+    @Get('/GetSPDefaultcontact/:id')
+    getSPDefaultcontact(@Param('id', ParseIntPipe) id:number){
+        return this.oarcleService.getSPDefaultcontacts(id)
+    }
+
+    @Get('/GetAllSPcontacts')
+    getSPcontacts() {
+        return this.oarcleService.getSPcontacts();
+    }
+
+    // Carnet Sequence
+
+    @Post('/CreateCarnetSequence/')
+    createCarnetSequence(@Body() body:CreateCarnetSequenceDTO){
+        return this.oarcleService.createCarnetSequence(
+            body.p_spid,
+            body.p_regionid,
+            body.p_startnumber,
+            body.p_endnumber,
+            body.p_carnettype
+        )
+    }
+
+    @Get('/GetCarnetSequence/:id')
+    getCarnetSequence(@Param('id', ParseIntPipe) id:number){
+        return this.oarcleService.getCarnetSequence(id)
+    }
 }

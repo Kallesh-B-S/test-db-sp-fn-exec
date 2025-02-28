@@ -1,9 +1,3 @@
-// GetRegions
-
-GET http://localhost:3000/oracle/GetRegions
-
-###
-
 // InsertRegions
 
 POST http://localhost:3000/oracle/InsertRegions
@@ -28,17 +22,12 @@ Content-Type: application/json
 
 ###
 
-// GetAllServiceproviders
+// GetRegions
 
-GET http://localhost:3000/oracle/GetAllServiceproviders
-
-###
-
-//GetSelectedServiceprovider
-
-GET http://localhost:3000/oracle/GetSelectedServiceprovider/12
+GET http://localhost:3000/oracle/GetRegions
 
 ###
+
 
 //InsertNewServiceProvider
 
@@ -63,6 +52,7 @@ Content-Type: application/json
 }
 
 ###
+
 
 //UpdateServiceProvider
 
@@ -89,15 +79,15 @@ Content-Type: application/json
 
 ###
 
-//GetSPcontacts
+// GetAllServiceproviders
 
-GET http://localhost:3000/oracle/GetSPcontacts/12
+GET http://localhost:3000/oracle/GetAllServiceproviders
 
 ###
 
-//GetSPDefaultcontact
+//GetSelectedServiceprovider
 
-GET http://localhost:3000/oracle/GetSPDefaultcontact/12
+GET http://localhost:3000/oracle/GetSelectedServiceprovider/12
 
 ###
 
@@ -120,6 +110,12 @@ Content-Type: application/json
 
 ###
 
+//SetSPDefaultcontact
+
+POST http://localhost:3000/oracle/SetSPDefaultcontact/12
+
+###
+
 //UpdateSPContacts
 
 PUT http://localhost:3000/oracle/UpdateSPContacts
@@ -139,9 +135,9 @@ Content-Type: application/json
 
 ###
 
-//SetSPDefaultcontact
+//GetSPcontacts
 
-POST http://localhost:3000/oracle/SetSPDefaultcontact/12
+GET http://localhost:3000/oracle/GetSPcontacts/12
 
 ###
 
@@ -150,5 +146,40 @@ POST http://localhost:3000/oracle/SetSPDefaultcontact/12
 POST http://localhost:3000/oracle/InactivateSPContact/12
 
 ###
+
+//GetSPDefaultcontact
+
+GET http://localhost:3000/oracle/GetSPDefaultcontact/12
+
+###
+
+//GetAllSPcontacts
+
+GET http://localhost:3000/oracle/GetAllSPcontacts
+
+###
+
+//CreateCarnetSequence
+
+POST http://localhost:3000/oracle/CreateCarnetSequence
+Content-Type: application/json
+
+{}
+
+###
+
+//GetCarnetSequence
+
+GET http://localhost:3000/oracle/GetCarnetSequence/12
+
+###
+
+
+
+
+
+
+
+
 
 
