@@ -135,11 +135,6 @@ Content-Type: application/json
 
 ###
 
-//GetSPcontacts
-
-GET http://localhost:3000/oracle/GetSPcontacts/12
-
-###
 
 //InactivateSPContact
 
@@ -164,7 +159,13 @@ GET http://localhost:3000/oracle/GetAllSPcontacts
 POST http://localhost:3000/oracle/CreateCarnetSequence
 Content-Type: application/json
 
-{}
+{
+    "p_spid": 2,
+    "p_regionid": 65,
+    "p_startnumber": 2000,
+    "p_endnumber": 3000,
+    "p_carnettype": "type1"
+}
 
 ###
 

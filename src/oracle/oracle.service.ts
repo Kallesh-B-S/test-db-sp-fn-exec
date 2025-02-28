@@ -902,6 +902,8 @@ export class OracleService {
             );
             let fres = await result.outBinds.p_cursor.getRows();
 
+            await result.outBinds.p_cursor.close()
+
             return fres
 
         } catch (err) {

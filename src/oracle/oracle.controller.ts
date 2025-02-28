@@ -140,7 +140,7 @@ export class OracleController {
             body.p_startnumber,
             body.p_endnumber,
             body.p_carnettype
-        )
+        )   
     }
 
     @Get('/GetCarnetSequence/:id')
