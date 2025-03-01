@@ -1,10 +1,13 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Put, Query, UsePipes } from '@nestjs/common';
 import { OracleService } from './oracle.service';
-import { CreateCarnetSequenceDTO, InsertNewServiceProviderDTO, InsertRegionsDto, InsertSPContactsDTO, UpdateRegionDto, UpdateServiceProviderDTO, UpdateSPContactsDTO } from './oracle.dto';
+import { CreateCarnetSequenceDTO, CreateParamRecordDTO, CreateTableRecordDTO, InsertNewServiceProviderDTO, InsertRegionsDto, InsertSPContactsDTO, UpdateParamRecordDTO, UpdateRegionDto, UpdateServiceProviderDTO, UpdateSPContactsDTO } from './oracle.dto';
+import { ParamTableService } from './paramTable.service';
 
 @Controller('oracle')
 export class OracleController {
-    constructor(private readonly oarcleService: OracleService) { }
+    constructor(
+        private readonly oarcleService: OracleService,
+        private readonly paramTableService: ParamTableService) { }
 
     // Regions
 
@@ -66,21 +69,21 @@ export class OracleController {
         )
     }
 
-    @Get('GetAllServiceproviders')
+    @Get('/GetAllServiceproviders')
     getAllServiceproviders() {
         return this.oarcleService.getAllServiceproviders();
     }
 
     @Get('/GetSelectedServiceprovider/:id')
-    getSelectedServiceprovider(@Param('id', ParseIntPipe) id:number) {
+    getSelectedServiceprovider(@Param('id', ParseIntPipe) id: number) {
         return this.oarcleService.getServiceproviderByID(id);
     }
 
-    
+
     // SPContacts
-    
+
     @Post('/InsertSPContacts')
-    insertSPContacts(@Body() body: InsertSPContactsDTO){
+    insertSPContacts(@Body() body: InsertSPContactsDTO) {
         return this.oarcleService.insertSPContacts(
             body.p_spid,
             body.p_defcontactflag,
@@ -96,12 +99,12 @@ export class OracleController {
     }
 
     @Post('/SetSPDefaultcontact/:id')
-    setSPDefaultcontact(@Param('id', ParseIntPipe) id:number){
+    setSPDefaultcontact(@Param('id', ParseIntPipe) id: number) {
         return this.oarcleService.setSPDefaultcontact(id)
     }
-  
+
     @Put('/UpdateSPContacts')
-    updateSPContacts(@Body() body: UpdateSPContactsDTO){
+    updateSPContacts(@Body() body: UpdateSPContactsDTO) {
         return this.oarcleService.updateSPContacts(
             body.p_spcontactid,
             body.p_firstname,
@@ -116,35 +119,83 @@ export class OracleController {
     }
 
     @Post('/InactivateSPContact/:id')
-    inactivateSPContact(@Param('id', ParseIntPipe) id:number){
+    inactivateSPContact(@Param('id', ParseIntPipe) id: number) {
         return this.oarcleService.inactivateSPContact(id)
     }
 
     @Get('/GetSPDefaultcontact/:id')
-    getSPDefaultcontact(@Param('id', ParseIntPipe) id:number){
+    getSPDefaultcontact(@Param('id', ParseIntPipe) id: number) {
         return this.oarcleService.getSPDefaultcontacts(id)
     }
 
-    @Get('/GetAllSPcontacts')
-    getSPcontacts() {
-        return this.oarcleService.getSPcontacts();
-    }
+    // @Get('/GetAllSPcontacts')
+    // getSPcontacts() {
+    //     return this.oarcleService.getSPcontacts();
+    // }
 
     // Carnet Sequence
 
     @Post('/CreateCarnetSequence/')
-    createCarnetSequence(@Body() body:CreateCarnetSequenceDTO){
+    createCarnetSequence(@Body() body: CreateCarnetSequenceDTO) {
         return this.oarcleService.createCarnetSequence(
             body.p_spid,
             body.p_regionid,
             body.p_startnumber,
             body.p_endnumber,
             body.p_carnettype
-        )   
+        )
     }
 
     @Get('/GetCarnetSequence/:id')
-    getCarnetSequence(@Param('id', ParseIntPipe) id:number){
+    getCarnetSequence(@Param('id', ParseIntPipe) id: number) {
         return this.oarcleService.getCarnetSequence(id)
+    }
+
+    // param table
+
+    @Get('/GetParamValues')
+    @UsePipes()
+    getParamValues(
+        @Query('id') id: string,
+        @Query('type') type: string
+    ) {
+        return this.paramTableService.GETPARAMVALUES(id ? Number(id) : undefined, type);
+    }
+
+    @Post('/CreateTableRecord')
+    createTableRecord(@Body() body: CreateTableRecordDTO) {
+        return this.paramTableService.CREATETABLERECORD(body.P_USERID, body.P_TABLEFULLDESC)
+    }
+
+    @Post('/CreateParamRecord')
+    createParamRecord(@Body() body: CreateParamRecordDTO) {
+        return this.paramTableService.CREATEPARAMRECORD(
+            body.P_PARAMTYPE,
+            body.P_PARAMDESC,
+            body.P_PARAMVALUE,
+            body.P_SORTSEQ,
+            body.P_USERID,
+            body.P_SPID,
+            body.P_ADDLPARAMVALUE1,
+            body.P_ADDLPARAMVALUE2,
+            body.P_ADDLPARAMVALUE3,
+            body.P_ADDLPARAMVALUE4,
+            body.P_ADDLPARAMVALUE5,
+        )
+    }
+
+    @Patch('/UpdateParamRecord')
+    UpdateParamRecord(@Body() body: UpdateParamRecordDTO) {
+        return this.paramTableService.UPDATEPARAMRECORD(body)
+    }
+
+    @Patch('/InActivateParamRecord')
+    inActivateParamRecord(@Query('pid') pid,@Query('uid') uid) {
+        return this.paramTableService.INACTIVATEPARAMRECORD(pid?Number(pid):pid,uid)
+    }
+
+    @Patch('/ReActivateParamRecord')
+    reActivateParamRecord(@Query('pid') pid,@Query('uid') uid) {
+        return this.paramTableService.REACTIVATEPARAMRECORD(pid?Number(pid):pid,uid)
     }
 }

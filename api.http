@@ -98,6 +98,7 @@ Content-Type: application/json
 
 {
     "p_spid": 12345,
+    "p_defcontactflag":"N",
     "p_firstname": "John",
     "p_lastname": "Doe",
     "p_title": "Mr.",
@@ -107,7 +108,7 @@ Content-Type: application/json
     "p_emailaddress": "john.doe@example.com",
     "p_user_id": "jdoe"
 }
-
+    
 ###
 
 //SetSPDefaultcontact
@@ -150,7 +151,7 @@ GET http://localhost:3000/oracle/GetSPDefaultcontact/12
 
 //GetAllSPcontacts
 
-GET http://localhost:3000/oracle/GetAllSPcontacts
+//GET http://localhost:3000/oracle/GetAllSPcontacts
 
 ###
 
@@ -175,6 +176,63 @@ GET http://localhost:3000/oracle/GetCarnetSequence/12
 
 ###
 
+//GetParamValues
+
+GET http://localhost:3000/oracle/GetParamValues?id=1&type=original
+
+###
+
+//CreateParamRecord
+
+POST http://localhost:3000/oracle/CreateParamRecord
+Content-Type: application/json
+
+{
+    # "P_SPID": 123,
+    "P_PARAMTYPE": "TypeA",
+    "P_PARAMDESC": "Description of the parameter",
+    "P_PARAMVALUE": "Value of the parameter",
+    # "P_ADDLPARAMVALUE1": "Additional Value 1",
+    # "P_ADDLPARAMVALUE2": "Additional Value 2",
+    # "P_ADDLPARAMVALUE3": null,
+    # "P_ADDLPARAMVALUE4": "Additional Value 4",
+    # "P_ADDLPARAMVALUE5": null,
+    "P_SORTSEQ": 1,
+    "P_USERID": "user123"
+}
+
+###
+
+// UpdateParamRecord
+
+PATCH http://localhost:3000/oracle/UpdateParamRecord
+Content-Type: application/json
+
+{
+    "P_SPID": 123,
+    "P_PARAMID": 456,
+    "P_PARAMDESC": "Description of the parameter",
+    "P_ADDLPARAMVALUE1": "Additional Value 1",
+    "P_ADDLPARAMVALUE2": "Additional Value 2",
+    "P_ADDLPARAMVALUE3": null,
+    "P_ADDLPARAMVALUE4": "Additional Value 4",
+    "P_ADDLPARAMVALUE5": null,
+    "P_SORTSEQ": 1,
+    "P_USERID": "user123"
+}
+
+###
+
+// InActivateParamRecord
+
+PATCH http://localhost:3000/oracle/InActivateParamRecord?pid=1&uid=2
+
+###
+
+// ReActivateParamRecord
+
+PATCH http://localhost:3000/oracle/ReActivateParamRecord?pid=1&uid=2
+###
 
 
 

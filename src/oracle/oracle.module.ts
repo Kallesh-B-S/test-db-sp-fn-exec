@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { OracleService } from './oracle.service';
 import { OracleController } from './oracle.controller';
-import { OracleDBService } from 'src/db/db.service';
 import { DbModule } from 'src/db/db.module';
+import { ParamTableService } from './paramTable.service';
 
 @Module({
   imports:[DbModule],
-  providers: [OracleService],
+  providers: [OracleService,ParamTableService],
   controllers: [OracleController],
-  exports:[OracleService]
+  exports:[OracleService,ParamTableService]
 })
 export class OracleModule {}
